@@ -23,7 +23,7 @@ Modifie le fichier config/db.php avec tes identifiants MySQL :
 ```
 Il est nécessaire d'avoir une table **user** et une table **produit** , si vos tables se nomment autrements alors modifier **crud_config.php**
 
-###4. Lancer le projet
+### 4. Lancer le projet
 Avec le serveur intégré de PHP
 Ouvre un terminal dans le dossier du projet et lance :
 ```bash
