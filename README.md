@@ -4,11 +4,11 @@ Projet réalisé dans le cadre du cours de développement web. Ce système perme
 
 ---
 
-## 🛠 **Prérequis**
+## **Prérequis**
 - PHP 8+ (avec l'extension PDO activée).
 - MySQL 8+.
 
-## 🚀 **Installation et configuration**
+##  **Installation et configuration**
 
 ### **1. Cloner le projet**
 
