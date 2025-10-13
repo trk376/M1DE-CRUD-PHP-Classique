@@ -14,11 +14,19 @@ return [
         ],
         'primary_key' => 'user_id'
     ],
-    'produit' => [  // Note : Utilise le même nom que dans ton URL (ex: produit, pas product)
-        'excluded_columns' => ['produit_id', 'created_at'],
-        'default_values' => [],
-        'primary_key' => 'produit_id'
+    'produit' => [ 
+        'excluded_columns' => ['id_p', 'date_in', 'timeS_in'],
+        'default_values' => [
+            'id_p' => function($pdo) {
+                $stmt = $pdo->query("SELECT MAX(user_compte_id) FROM user");
+                $maxId = $stmt->fetchColumn();
+                return $maxId ? $maxId + 1 : 1;
+            },
+            'date_in' => function() {
+            return date('Y-m-d'); 
+            }
+        ],
+        'primary_key' => 'id_p'
     ],
-    // Ajoute d'autres tables ici
 ];
 ?>
