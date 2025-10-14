@@ -1,8 +1,8 @@
 <?php
 // Connexion à la base de données
-$pdo = new PDO('mysql:host=127.0.0.1;dbname=2025_M1', 
-    'user_2025', 
-    'user');
+$pdo = new PDO('mysql:host=127.0.0.1;dbname=2025_m1;port=3306;charset=utf8', 
+    'root', 
+    '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Fonction pour lister les entrées d'une table
