@@ -31,7 +31,7 @@ function update($pdo, $table, $data, $primaryKey, $id) {
     $setClause = implode(', ', $setParts);
     $sql = "UPDATE $table SET $setClause WHERE $primaryKey = :$primaryKey";
     $stmt = $pdo->prepare($sql);
-    $data[$primaryKey] = $id; // Ajouter l'ID pour la clause WHERE
+    $data[$primaryKey] = $id; 
     return $stmt->execute($data);
 }
 
