@@ -4,9 +4,7 @@ return [
         'excluded_columns' => ['user_id', 'user_date_new', 'user_date_login', 'user_compte_id'],
         'default_values' => [
             'user_compte_id' => function($pdo) {
-                $stmt = $pdo->query("SELECT MAX(user_compte_id) FROM user");
-                $maxId = $stmt->fetchColumn();
-                return $maxId ? $maxId + 1 : 1;
+                return null;
             },
             'user_password' => function($password) {
                 return password_hash($password, PASSWORD_DEFAULT);
