@@ -26,6 +26,10 @@ return [
         ],
         'primary_key' => 'id_p'
     ],
+    // Table historique_prix : LECTURE SEULE
+    // Cette table ne peut être ni créée, ni modifiée, ni supprimée manuellement.
+    // Les enregistrements sont générés automatiquement lors de la modification des prix des produits.
+    // Ceci garantit l'intégrité de l'audit des prix.
     'historique_prix' => [ 
         'excluded_columns' => ['id_hist', 'date_modification'],
         'default_values' => [],

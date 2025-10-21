@@ -3,6 +3,17 @@ session_start();
 include '../config/db.php';
 $crudConfig = include '../config/crud_config.php';
 
+// Charger les types de produits depuis le fichier JSON
+$productTypesFile = '../config/product_types.json';
+$productTypes = [];
+if (file_exists($productTypesFile)) {
+    $productTypesJson = file_get_contents($productTypesFile);
+    $productTypesData = json_decode($productTypesJson, true);
+    if ($productTypesData && isset($productTypesData['categories'])) {
+        $productTypes = $productTypesData['categories'];
+    }
+}
+
 // 1. Récupérer le nom de la table et l'ID
 $table = $_GET['table'] ?? die("Table non spécifiée");
 $id = $_GET['id'] ?? die("ID non spécifié");
@@ -15,6 +26,11 @@ if (!isset($_SESSION['user_id'])) {
 // Bloquer l'accès à la table user
 if ($table === 'user') {
     die("Accès refusé. Pour modifier votre compte, allez dans <a href='../auth/profile.php'>Mon profil</a>.");
+}
+
+// Bloquer l'accès à la table historique_prix (lecture seule)
+if ($table === 'historique_prix') {
+    die("Accès refusé. L'historique des prix ne peut pas être modifié. Il s'agit d'un enregistrement immuable à des fins d'audit.");
 }
 
 // 3. Charger la configuration pour cette table
@@ -111,6 +127,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                        value="<?= htmlspecialchars($item[$column] ?? '') ?>" 
                        placeholder="Ex: 15.50">
                 <small>(Pourcentage de promotion entre 0 et 100, laissez vide si pas de promotion)</small>
+                <br>
+            <?php elseif ($table === 'produit' && $column === 'type_p'): ?>
+                <label><?= ucfirst(str_replace('_', ' ', $column)) ?>:</label>
+                <select name="<?= $column ?>" required>
+                    <option value="">-- Sélectionnez un type --</option>
+                    <?php foreach ($productTypes as $type): ?>
+                        <option value="<?= htmlspecialchars($type['label']) ?>" 
+                                <?= ($item[$column] === $type['label']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($type['label']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
                 <br>
             <?php else: ?>
                 <label><?= ucfirst(str_replace('_', ' ', $column)) ?>:</label>

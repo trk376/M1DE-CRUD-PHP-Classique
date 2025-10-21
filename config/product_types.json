@@ -1,0 +1,44 @@
+{
+  "categories": [
+    {
+      "id": "electronique",
+      "label": "Électronique"
+    },
+    {
+      "id": "alimentation",
+      "label": "Alimentation"
+    },
+    {
+      "id": "papeterie",
+      "label": "Papeterie"
+    },
+    {
+      "id": "meubles",
+      "label": "Meubles"
+    },
+    {
+      "id": "vetements",
+      "label": "Vêtements"
+    },
+    {
+      "id": "sport",
+      "label": "Sport"
+    },
+    {
+      "id": "jouets",
+      "label": "Jouets"
+    },
+    {
+      "id": "bricolage",
+      "label": "Bricolage"
+    },
+    {
+      "id": "maison",
+      "label": "Maison"
+    },
+    {
+      "id": "jardin",
+      "label": "Jardin"
+    }
+  ]
+}

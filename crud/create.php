@@ -6,6 +6,17 @@ ini_set('display_errors', 1);
 include '../config/db.php';
 $crudConfig = include '../config/crud_config.php';
 
+// Charger les types de produits depuis le fichier JSON
+$productTypesFile = '../config/product_types.json';
+$productTypes = [];
+if (file_exists($productTypesFile)) {
+    $productTypesJson = file_get_contents($productTypesFile);
+    $productTypesData = json_decode($productTypesJson, true);
+    if ($productTypesData && isset($productTypesData['categories'])) {
+        $productTypes = $productTypesData['categories'];
+    }
+}
+
 // 1. Récupérer le nom de la table
 $table = $_GET['table'] ?? die("Table non spécifiée");
 
@@ -17,6 +28,11 @@ if (!isset($_SESSION['user_id'])) {
 // Bloquer l'accès à la table user
 if ($table === 'user') {
     die("Accès refusé. Utilisez le formulaire d'<a href='../auth/register.php'>inscription</a> pour créer un compte.");
+}
+
+// Bloquer l'accès à la table historique_prix (création automatique uniquement)
+if ($table === 'historique_prix') {
+    die("Accès refusé. L'historique des prix est généré automatiquement lors de la modification des prix des produits. Il ne peut pas être créé manuellement.");
 }
 
 // 3. Charger la configuration pour cette table
@@ -105,6 +121,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label><?= ucfirst(str_replace('_', ' ', $column)) ?> (%):</label>
                 <input type="number" name="<?= $column ?>" min="0" max="100" step="0.01" placeholder="Ex: 15.50">
                 <small>(Pourcentage de promotion entre 0 et 100, laissez vide si pas de promotion)</small>
+                <br>
+            <?php elseif ($table === 'produit' && $column === 'type_p'): ?>
+                <label><?= ucfirst(str_replace('_', ' ', $column)) ?>:</label>
+                <select name="<?= $column ?>" required>
+                    <option value="">-- Sélectionnez un type --</option>
+                    <?php foreach ($productTypes as $type): ?>
+                        <option value="<?= htmlspecialchars($type['label']) ?>">
+                            <?= htmlspecialchars($type['label']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
                 <br>
             <?php else: ?>
                 <label><?= ucfirst(str_replace('_', ' ', $column)) ?>:</label>

@@ -46,7 +46,7 @@ if (empty($items)) {
         <?php endif; ?>
         
         <div class="actions-header">
-            <?php if ($is_logged_in): ?>
+            <?php if ($is_logged_in && $table !== 'historique_prix'): ?>
                 <a href="create.php?table=<?= $table ?>" class="button">Ajouter</a>
             <?php endif; ?>
             <a href="../index.php" class="button">Retour à l'accueil</a>
@@ -120,9 +120,11 @@ if (empty($items)) {
                         </div>
                     </div>
                     <div class="card-actions">
-                        <?php if ($is_logged_in): ?>
+                        <?php if ($is_logged_in && $table !== 'historique_prix'): ?>
                             <a href="update.php?table=<?= $table ?>&id=<?= $item[$config['primary_key']] ?>" class="button">Modifier</a>
                             <a href="delete.php?table=<?= $table ?>&id=<?= $item[$config['primary_key']] ?>" class="button delete" onclick="return confirm('Êtes-vous sûr ?')">Supprimer</a>
+                        <?php elseif ($table === 'historique_prix'): ?>
+                            <span style="color: #666; font-style: italic; font-size: 0.9em;">Lecture seule</span>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>

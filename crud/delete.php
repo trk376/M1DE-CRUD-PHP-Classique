@@ -17,6 +17,11 @@ if ($table === 'user') {
     die("Accès refusé. Pour supprimer votre compte, allez dans <a href='../auth/profile.php'>Mon profil</a>.");
 }
 
+// Bloquer l'accès à la table historique_prix (lecture seule)
+if ($table === 'historique_prix') {
+    die("Accès refusé. L'historique des prix ne peut pas être supprimé. Il s'agit d'un enregistrement immuable à des fins d'audit.");
+}
+
 // 3. Charger la configuration pour cette table
 $config = $crudConfig[$table] ?? die("Configuration non trouvée pour la table $table");
 
