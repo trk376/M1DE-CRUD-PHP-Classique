@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="auth-container">
-        <h1>🔐 Connexion</h1>
+        <h1>Connexion</h1>
         
         <?php if ($error): ?>
             <div class="error-message"><?= htmlspecialchars($error) ?></div>

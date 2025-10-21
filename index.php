@@ -99,14 +99,14 @@ $account_deleted = isset($_GET['deleted']) && $_GET['deleted'] == 1;
         
         <?php if ($account_deleted): ?>
             <div class="success-message">
-                Votre compte a été supprimé avec succès. Au revoir ! 👋
+                Votre compte a été supprimé avec succès. o7
             </div>
         <?php endif; ?>
         
         <div class="user-info">
             <?php if (isset($_SESSION['user_id'])): ?>
                 <div class="welcome">
-                    Bienvenue, <?= htmlspecialchars($_SESSION['user_login']) ?> 👋
+                    Bienvenue, <?= htmlspecialchars($_SESSION['user_login']) ?>
                 </div>
                 <div class="auth-links">
                     <a href="auth/profile.php">Mon profil</a>
@@ -128,17 +128,17 @@ $account_deleted = isset($_GET['deleted']) && $_GET['deleted'] == 1;
             <ul class="menu-list">
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <li>
-                        <a href="crud/read.php?table=produit">📦 Gérer les produits</a>
+                        <a href="crud/read.php?table=produit">Gérer les produits</a>
                     </li>
                     <li>
-                        <a href="crud/read.php?table=historique_prix">📊 Consulter l'historique des prix</a>
+                        <a href="crud/read.php?table=historique_prix">Consulter l'historique des prix</a>
                     </li>
                 <?php else: ?>
                     <li>
-                        <a href="crud/read.php?table=produit">📦 Voir les produits (lecture seule)</a>
+                        <a href="crud/read.php?table=produit">Voir les produits (lecture seule)</a>
                     </li>
                     <li style="color: #999; padding: 12px 20px;">
-                        🔒 Connectez-vous pour gérer les produits
+                        Connectez-vous pour gérer les produits
                     </li>
                 <?php endif; ?>
             </ul>

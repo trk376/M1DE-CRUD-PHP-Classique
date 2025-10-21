@@ -312,7 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Zone de danger -->
             <div class="profile-section">
                 <div class="danger-zone">
-                    <h3>⚠️ Zone dangereuse</h3>
+                    <h3>ATTENTIONNNNNNNNNNNN</h3>
                     <p>La suppression de votre compte est définitive et irréversible. Toutes vos données seront perdues.</p>
                     
                     <form method="POST" onsubmit="return confirm('Êtes-vous vraiment sûr de vouloir supprimer votre compte ? Cette action est IRRÉVERSIBLE !');">

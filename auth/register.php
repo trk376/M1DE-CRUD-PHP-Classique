@@ -45,7 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 try {
                     $stmt->execute([$login, $hashed_password, $email]);
-                    $success = "Inscription réussie ! Vous pouvez maintenant vous connecter.";
+                    $_SESSION['user_id'] = $pdo->lastInsertId();
+                    $_SESSION['user_login'] = $login;
+                    header('Location: ../index.php');
+                    exit;
                 } catch (PDOException $e) {
                     $error = "Erreur lors de l'inscription : " . $e->getMessage();
                 }
@@ -148,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="auth-container">
-        <h1>📝 Inscription</h1>
+        <h1>Inscription</h1>
         
         <?php if ($error): ?>
             <div class="error-message"><?= htmlspecialchars($error) ?></div>
