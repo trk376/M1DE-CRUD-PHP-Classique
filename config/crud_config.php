@@ -26,5 +26,10 @@ return [
         ],
         'primary_key' => 'id_p'
     ],
+    'historique_prix' => [ 
+        'excluded_columns' => ['id_hist', 'date_modification'],
+        'default_values' => [],
+        'primary_key' => 'id_hist'
+    ],
 ];
 ?>
