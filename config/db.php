@@ -14,7 +14,7 @@ function getAll($pdo, $table) {
 function create($pdo, $table, $data, $primaryKey) {
     unset($data[$primaryKey]); // Ne pas inclure la clé primaire (auto-incrémentée)
 
-    $columns = implode(', ', array_keys($data));
+    $columns = implode(', ', array_keys($data)); // implode sert à joindre les clés avec une virgule
     $placeholders = ':' . implode(', :', array_keys($data));
     $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
     $stmt = $pdo->prepare($sql);

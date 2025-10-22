@@ -107,8 +107,14 @@ $account_deleted = isset($_GET['deleted']) && $_GET['deleted'] == 1;
             <?php if (isset($_SESSION['user_id'])): ?>
                 <div class="welcome">
                     Bienvenue, <?= htmlspecialchars($_SESSION['user_login']) ?>
+                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                        <span style="background: #e74c3c; color: white; padding: 2px 8px; border-radius: 3px; font-size: 0.8em; margin-left: 5px;">🛡️ Admin</span>
+                    <?php endif; ?>
                 </div>
                 <div class="auth-links">
+                    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                        <a href="admin/index.php" style="background: #e74c3c;">Backoffice</a>
+                    <?php endif; ?>
                     <a href="auth/profile.php">Mon profil</a>
                     <a href="auth/logout.php" class="logout">Déconnexion</a>
                 </div>

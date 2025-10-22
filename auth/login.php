@@ -27,12 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_id'] = $user['user_id'];
             $_SESSION['user_login'] = $user['user_login'];
             $_SESSION['user_mail'] = $user['user_mail'];
+            $_SESSION['user_role'] = $user['user_role'] ?? 'user';
             
             // Mettre à jour la date de dernière connexion
             $stmt = $pdo->prepare("UPDATE user SET user_date_login = NOW() WHERE user_id = ?");
             $stmt->execute([$user['user_id']]);
             
-            header('Location: ../index.php');
+            // Rediriger vers le backoffice si admin, sinon vers l'accueil
+            if ($_SESSION['user_role'] === 'admin') {
+                header('Location: ../admin/index.php');
+            } else {
+                header('Location: ../index.php');
+            }
             exit;
         } else {
             $error = "Identifiant ou mot de passe incorrect.";

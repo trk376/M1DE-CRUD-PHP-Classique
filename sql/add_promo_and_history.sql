@@ -32,14 +32,6 @@ BEGIN
     END IF;
 END$$
 
--- 4. Créer un trigger pour enregistrer le prix initial lors de la création
-CREATE TRIGGER `after_produit_insert`
-AFTER INSERT ON `produit`
-FOR EACH ROW
-BEGIN
-    INSERT INTO `historique_prix` (`id_produit`, `ancien_prix`, `nouveau_prix`, `motif`)
-    VALUES (NEW.id_p, 0.00, NEW.prix_ht, 'Prix initial');
-END$$
 
 DELIMITER ;
 

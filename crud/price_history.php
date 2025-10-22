@@ -139,6 +139,7 @@ $prix_avec_promo = ($ppromo && $ppromo > 0) ? $prix_actuel * (1 - $ppromo / 100)
             <p>Aucun historique de prix disponible pour ce produit.</p>
         </div>
     <?php else: ?>
+
         <div class="history-cards">
             <?php foreach ($historique as $hist): ?>
             <?php 
@@ -199,16 +200,17 @@ $prix_avec_promo = ($ppromo && $ppromo > 0) ? $prix_actuel * (1 - $ppromo / 100)
         <div class="chart-container">
             <h3>Statistiques</h3>
             <?php
-                $prix_min = min(array_column($historique, 'nouveau_prix'));
-                $prix_max = max(array_column($historique, 'nouveau_prix'));
-                $nb_modifications = count($historique) - 1; // -1 pour exclure le prix initial
+                $tous_les_prix = array_merge(
+                    array_column($historique, 'ancien_prix'),
+                    array_column($historique, 'nouveau_prix')
+                );
+                $prix_min = min($tous_les_prix);
+                $prix_max = max($tous_les_prix);
+                $nb_modifications = count($historique);
             ?>
             <p><strong>Prix minimum:</strong> <?= number_format($prix_min, 2, ',', ' ') ?> €</p>
             <p><strong>Prix maximum:</strong> <?= number_format($prix_max, 2, ',', ' ') ?> €</p>
             <p><strong>Nombre de modifications:</strong> <?= $nb_modifications ?></p>
-            <?php if ($prix_min > 0): ?>
-                <p><strong>Variation totale:</strong> <?= number_format((($prix_actuel - $prix_min) / $prix_min) * 100, 1) ?>%</p>
-            <?php endif; ?>
         </div>
     <?php endif; ?>
 

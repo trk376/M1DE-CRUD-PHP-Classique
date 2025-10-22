@@ -47,6 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->execute([$login, $hashed_password, $email]);
                     $_SESSION['user_id'] = $pdo->lastInsertId();
                     $_SESSION['user_login'] = $login;
+                    $_SESSION['user_mail'] = $email;
+                    $_SESSION['user_role'] = 'user'; // Nouvel utilisateur = rôle 'user' par défaut
                     header('Location: ../index.php');
                     exit;
                 } catch (PDOException $e) {
