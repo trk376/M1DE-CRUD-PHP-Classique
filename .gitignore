@@ -1,1 +1,2 @@
-img_produit/*
+img_produit/**
+crawler.py

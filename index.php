@@ -153,3 +153,5 @@ $account_deleted = isset($_GET['deleted']) && $_GET['deleted'] == 1;
     </div>
 </body>
 </html>
+
+<!-- start serv : php -S localhost:8000 -t ./ -->

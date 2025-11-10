@@ -13,6 +13,7 @@ if (file_exists($productTypesFile)) {
         $productTypes = $productTypesData['categories'];
     }
 }
+// on obtient : $productTypes = [ ['id' => 1, 'label' => 'Électronique'], ... ];
 
 // 1. Récupérer le nom de la table et l'ID
 $table = $_GET['table'] ?? die("Table non spécifiée");
@@ -54,7 +55,7 @@ $formColumns = array_diff($columns, $config['excluded_columns']);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = $_POST;
 
-    // Valider et nettoyer le champ ppromo pour les produits
+    // nettoyer le champ ppromo pour les produits
     if ($table === 'produit' && isset($data['ppromo'])) {
         if ($data['ppromo'] === '' || $data['ppromo'] === null) {
             $data['ppromo'] = null;
@@ -65,13 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Gérer l'upload d'image pour la table produit
+    // upload de l'image de produits
     if ($table === 'produit' && isset($_FILES['image_p']) && $_FILES['image_p']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = '../img_produit/';
         $fileName = basename($_FILES['image_p']['name']);
         $targetFile = $uploadDir . $fileName;
         
-        // Vérifier si c'est une image
+        // verification que le fichier est une image
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         

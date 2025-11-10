@@ -16,7 +16,7 @@ return [
         'excluded_columns' => ['id_p', 'date_in', 'timeS_in'],
         'default_values' => [
             'id_p' => function($pdo) {
-                $stmt = $pdo->query("SELECT MAX(user_compte_id) FROM user");
+                $stmt = $pdo->query("SELECT MAX(id_p) FROM produit");
                 $maxId = $stmt->fetchColumn();
                 return $maxId ? $maxId + 1 : 1;
             },
