@@ -1,6 +1,7 @@
 <?php
 session_start();
 include '../config/db.php';
+include '../config/image_handler.php';
 $crudConfig = include '../config/crud_config.php';
 
 // 1. Récupérer le nom de la table et l'ID
@@ -25,7 +26,19 @@ if ($table === 'historique_prix') {
 // 3. Charger la configuration pour cette table
 $config = $crudConfig[$table] ?? die("Configuration non trouvée pour la table $table");
 
-// 4. Supprimer l'élément
+// 4. Récupérer l'élément avant suppression (pour nettoyer les images)
+$stmt = $pdo->prepare("SELECT * FROM $table WHERE {$config['primary_key']} = ?");
+$stmt->execute([$id]);
+$item = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($item) {
+    // Nettoyer l'image si c'est un produit
+    if ($table === 'produit' && !empty($item['image_p'])) {
+        ImageHandler::delete($item['image_p']);
+    }
+}
+
+// 5. Supprimer l'élément
 $stmt = $pdo->prepare("DELETE FROM $table WHERE {$config['primary_key']} = ?");
 $stmt->execute([$id]);
 

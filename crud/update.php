@@ -1,9 +1,10 @@
 <?php
 session_start();
 include '../config/db.php';
+include '../config/image_handler.php';
 $crudConfig = include '../config/crud_config.php';
 
-// Charger les types de produits depuis le fichier JSON
+// types de produits depuis le fichier JSON
 $productTypesFile = '../config/product_types.json';
 $productTypes = [];
 if (file_exists($productTypesFile)) {
@@ -66,25 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // upload de l'image de produits
-    if ($table === 'produit' && isset($_FILES['image_p']) && $_FILES['image_p']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../img_produit/';
-        $fileName = basename($_FILES['image_p']['name']);
-        $targetFile = $uploadDir . $fileName;
-        
-        // verification que le fichier est une image
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        
-        if (in_array($imageFileType, $allowedTypes)) {
-            if (move_uploaded_file($_FILES['image_p']['tmp_name'], $targetFile)) {
-                // Supprimer l'ancienne image si elle n'est pas default.png
-                if ($item['image_p'] !== 'default.png' && file_exists($uploadDir . $item['image_p'])) {
-                    unlink($uploadDir . $item['image_p']);
-                }
-                $data['image_p'] = $fileName;
-            }
+    // Gestion de l'image de produit
+    if ($table === 'produit' && isset($_FILES['image_p'])) {
+        $newImage = ImageHandler::replace($item['image_p'] ?? 'default.png', $_FILES['image_p']);
+        if ($newImage) {
+            $data['image_p'] = $newImage;
         }
+        // Si pas de nouvel upload, ne pas modifier le champ image
     }
 
     // Appliquer les valeurs par défaut pour les mots de passe

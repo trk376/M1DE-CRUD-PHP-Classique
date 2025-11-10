@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 include '../config/db.php';
+include '../config/image_handler.php';
 $crudConfig = include '../config/crud_config.php';
 
 // Charger les types de produits depuis le fichier JSON
@@ -61,26 +62,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Gérer l'upload d'image pour la table produit
-    if ($table === 'produit' && isset($_FILES['image_p']) && $_FILES['image_p']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../img_produit/';
-        $fileName = basename($_FILES['image_p']['name']);
-        $targetFile = $uploadDir . $fileName;
-        
-        // Vérifier si c'est une image
-        $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        
-        if (in_array($imageFileType, $allowedTypes)) {
-            if (move_uploaded_file($_FILES['image_p']['tmp_name'], $targetFile)) {
-                $data['image_p'] = $fileName;
-            } else {
-                $data['image_p'] = 'default.png';
-            }
-        } else {
-            $data['image_p'] = 'default.png';
+    if ($table === 'produit') {
+        $uploadedImage = ImageHandler::upload($_FILES['image_p'] ?? null);
+        if ($uploadedImage) {
+            $data['image_p'] = $uploadedImage;
         }
-    } elseif ($table === 'produit') {
-        $data['image_p'] = 'default.png';
+        // Si pas d'upload, le champ n'est pas défini et prendra la valeur par défaut
     }
 
     // Appliquer les valeurs par défaut
