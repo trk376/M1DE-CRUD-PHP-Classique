@@ -24,6 +24,51 @@ if (!$config) {
 $stmt = $pdo->query("SELECT * FROM $table");
 $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Fonction de tri
+function sortItems(&$items, $sortBy, $sortOrder) {
+    usort($items, function($a, $b) use ($sortBy, $sortOrder) {
+        $valA = $a[$sortBy] ?? '';
+        $valB = $b[$sortBy] ?? '';
+        
+        // Gestion spéciale pour les prix avec promotions
+        if ($sortBy === 'prix_ht') {
+            $prixA = floatval($a['prix_ht']);
+            $prixB = floatval($b['prix_ht']);
+            
+            // Si promotion, utiliser le prix promo pour le tri
+            if (isset($a['ppromo']) && floatval($a['ppromo']) > 0) {
+                $prixA = $prixA * (1 - floatval($a['ppromo']) / 100);
+            }
+            if (isset($b['ppromo']) && floatval($b['ppromo']) > 0) {
+                $prixB = $prixB * (1 - floatval($b['ppromo']) / 100);
+            }
+            
+            $valA = $prixA;
+            $valB = $prixB;
+        }
+        
+        // Comparaison numérique ou string
+        if (is_numeric($valA) && is_numeric($valB)) {
+            $result = $valA - $valB;
+        } else {
+            $result = strcasecmp(strval($valA), strval($valB));
+        }
+        
+        return $sortOrder === 'desc' ? -$result : $result;
+    });
+}
+
+// Récupérer les paramètres de tri
+$sortBy = $_GET['sort'] ?? 'id_p';
+$sortOrder = $_GET['order'] ?? 'asc';
+$allowedSortColumns = ['id_p', 'designation_p', 'type_p', 'prix_ht', 'stock_p', 'date_in'];
+
+// Appliquer le tri si la colonne est autorisée
+if (in_array($sortBy, $allowedSortColumns)) {
+    sortItems($items, $sortBy, $sortOrder);
+}
+
+
 if (empty($items)) {
     echo "Aucune donnée dans la table '$table'.";
 } else {

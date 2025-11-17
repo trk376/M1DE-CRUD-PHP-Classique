@@ -67,4 +67,39 @@ function getPrimaryKey($pdo, $table) {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['Column_name'] ?? 'id';
 }
+
+// Fonction de tri générique
+function sortItems(&$items, $sortBy, $sortOrder, $table = 'produit') {
+    usort($items, function($a, $b) use ($sortBy, $sortOrder, $table) {
+        $valA = $a[$sortBy] ?? '';
+        $valB = $b[$sortBy] ?? '';
+        
+        // Gestion spéciale pour les prix avec promotions
+        if ($table === 'produit' && $sortBy === 'prix_ht') {
+            $prixA = floatval($a['prix_ht']);
+            $prixB = floatval($b['prix_ht']);
+            
+            // Si promotion, utiliser le prix promo pour le tri
+            if (isset($a['ppromo']) && floatval($a['ppromo']) > 0) {
+                $prixA = $prixA * (1 - floatval($a['ppromo']) / 100);
+            }
+            if (isset($b['ppromo']) && floatval($b['ppromo']) > 0) {
+                $prixB = $prixB * (1 - floatval($b['ppromo']) / 100);
+            }
+            
+            $valA = $prixA;
+            $valB = $prixB;
+        }
+        
+        // Comparaison numérique ou string
+        if (is_numeric($valA) && is_numeric($valB)) {
+            $result = $valA - $valB;
+        } else {
+            $result = strcasecmp(strval($valA), strval($valB));
+        }
+        
+        return $sortOrder === 'desc' ? -$result : $result;
+    });
+}
+
 ?>
